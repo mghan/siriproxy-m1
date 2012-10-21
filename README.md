@@ -58,7 +58,7 @@ Usage
 **Arm away, arm stay, disarm alarm**
 
 - Siri will change the alarm to the state requested and pushes a custom image to Siri.  Currently it does not confirm the state change, but I have not had any reliability problems.
-- NOTE: Siri has a lot of trouble with “S” sounds so you may have to alter you speech slightly to get Siri to recognize “arm stay” or you can change the syntax to use a look for a different pattern.  
+- NOTE: Siri has a lot of trouble with “S” sounds so you may have to alter you speech slightly to get Siri to recognize “arm stay” or you can change the syntax to look for a different pattern.  
 
 **Open garage, close garage**
 
