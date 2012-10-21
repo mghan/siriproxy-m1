@@ -78,7 +78,7 @@ Above are the main arguments that have been coded so far for use with the ISY-99
 To Do List
 ----------
 
-- Test authenticated IP camera access.
+- Add authenticated IP camera access.
 - Add ability to launch a live IP camera feed or at least provide a button to do so.
 - Perhaps develop code for self awareness of devices/addresses (would require major overhaul and be completely different from current methods)
 - The sky's the limit!  Accepting any and all suggetions.
