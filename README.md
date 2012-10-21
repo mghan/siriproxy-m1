@@ -13,7 +13,7 @@ My fork of [Hoopty3’s plugin] (https://github.com/hoopty3/siriproxy-isy99i) is
 - Added ability to push IP camera and custom images to Siri.     
 - Removed dimmer control since I mostly have CFL’s in my home.
 - Removed status checking since I already have visual feedback.
-- Removed the Insteon thermostat control since I have a [Nest] (http://www.nest.com) thermostat which can also be controlled by SiriProxy.
+- Removed the Insteon thermostat control since I have a [Nest] (http://www.nest.com) thermostat which can also be controlled by SiriProxy thanks to [Chilitechno.] (https://github.com/chilitechno/SiriProxy-NestLearningThermostat)
 
 I would also like to point out that I am not a programmer, and haven't coded in Ruby before, so go easy on me. I gave myself a crash course in Ruby once I learned of this project, and that is it.  Google has been a very close friend over the past week or so.
 
