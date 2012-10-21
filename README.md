@@ -51,13 +51,9 @@ and rename it siriproxy-isy99i or create a symbolic link. You will need to go to
 Usage
 -----
 
-**Turn on (device name)**
+**Turn on, turn off (device name)**
 
-- Will turn on the device. 
-
-**Turn off (device name)**
-
-- Will turn off the device.
+- Will turn on or off the device. 
 
 **Arm away, arm stay, disarm alarm**
 
