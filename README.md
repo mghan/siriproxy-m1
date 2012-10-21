@@ -8,27 +8,37 @@ Siriproxy-isy99i is a [SiriProxy] (https://github.com/plamoni/SiriProxy) plugin 
 
 Utilizing the REST interface of the ISY-99i, this plugin matches certain voice commands and sends the appropriate command via http to the controller.  See below for specific usage.
 
-I would also like to point out that I am not a programmer, and haven't coded in Ruby before, so go easy on me.  I've done some php coding (more like hacking) and that is about it.  I gave myself a crash course in Ruby once I learned of this project, and that is it.  Google has been a very close friend over the past week or so...
+My fork of [Hoopty3’s plugin] (https://github.com/hoopty3/siriproxy-isy99i) is just that.  If you already have an ISY-99i and made it here, then you are already a tweaker and know it is impossible to provide single solution that will suit everyone’s needs and configuration.  I do not intend to merge any changes unless they are improvements in reliability or control. The baseline changes I made from Hoopty3’s plugin include:
+- Added Elk M1 Gold control for arming, disarming, and relay output control.
+- Added ability to push IP camera and custom images to Siri.     
+- Removed dimmer control since I mostly have CFL’s in my home.
+- Removed status checking since I already have visual feedback.
+- Removed the Insteon thermostat control since I have a [Nest] (http://www.nest.com) thermostat which can also be controlled by SiriProxy.
 
-I am fully aware of the fact that the code could be cleaner, done differently, done better, or whatever.  Feel free to point out mistakes/corrections, offer constructive criticism, etc... This is a work in progress and I'm counting on the community to help make it better.
+I would also like to point out that I am not a programmer, and haven't coded in Ruby before, so go easy on me. I gave myself a crash course in Ruby once I learned of this project, and that is it.  Google has been a very close friend over the past week or so.
+
+I am fully aware of the fact that the code could be cleaner, done differently, done better, or whatever.  Feel free to point out mistakes/corrections, offer constructive criticism, etc. This is a work in progress and I'm counting on the community to help make it better.
 
 **Above all: Use all the available resources out there if you have problems.  Trust me.  If I can put this together having never really programmed, you can figure out how to get it running.**
 
 Installation
 ------------
 
-First and foremost, [SiriProxy] (https://github.com/plamoni/SiriProxy) must be installed and working.  Do not attempt to do anything with this plugin until you have installed SiriProxy and have verified that it is working correctly.  The author provides very detailed, step-by-step written instructions, as well as video, on how to do this.  
+First and foremost, [SiriProxy] (https://github.com/plamoni/SiriProxy) must be installed and working.  Do not attempt to do anything with this plugin until you have installed SiriProxy and have verified that it is working correctly. If this is your first SiriProxy venture, I highly recommend you do all your initial setup and tweaking on a [Virtual Machine] (http://www.virtualbox.org) running [Ubuntu Linux.] (http://www.ubuntu.com) In my case, I have SiriProxy installed a Marvell SheevaPlug computer which I can leave on 24/7.   For more information on SiriProxy on other platforms, I started a [SiriProxy Wiki] (https://github.com/plamoni/SiriProxy/wiki/Installation-How-Tos) page to capture everyone’s efforts.  
 
 Once SiriProxy is up and running, you'll want to add the siriproxy-isy99i plugin.  This will have to be done manually, as it is necessary to add your specific devices and their addresses to a configuration file (devices.rb).  This process is a bit more complicated that some other plugins, but I will walk you through the steps I used.  
 
 It may also be helpful to look at this [video by jbaybayjbaybay] (http://www.youtube.com/watch?v=A48SGUt_7lw) as it's the one I used to figure this process out.  The video includes info on creating a new plugin and editing the files, which can be helpful when it comes to experimenting with your own plugins, but it won't be necessary in order to just install this plugin.  So, I'll skip those particular instructions below.
 
-1.  Download the repository as a [zip file] (https://github.com/hoopty3/siriproxy-isy99i/zipball/master).
-2.  Extract the full directory (i.e. hoopty3-siriproxy-isy99i-######) to `~/.rvm/gems/ruby-1.9.3-p0@SiriProxy/gems/siriproxy-0.3.0/plugins` and rename it siriproxy-isy99i. You will need to go to View and select 'Show Hidden Files' in order to see .rvm directory.
-3.  Navigate to the `siriproxy-isy99i/lib` directory and open devices.rb for editing.  Gedit works just fine.
+1.  Download the repository as a [zip file] (https://github.com/elvisimprsntr/siriproxy-isy99i/zipball/master).
+2.  Extract the full directory (i.e. elvisimprsntr-siriproxy-isy99i-######), depending on your distribution, to: 
+- `~/.rvm/gems/ruby-1.9.3-p###@SiriProxy/gems/siriproxy-0.3.#/plugins` 
+- `/usr/local/rvm/gems/ruby-1.9.3-p###@SiriProxy/gems/siriproxy-0.3.#/plugins`
+and rename it siriproxy-isy99i or create a symbolic link. You will need to go to View and select 'Show Hidden Files' in order to see .rvm directory.
+3.  Navigate to the `siriproxy-isy99i/lib` directory and open devices.rb for editing.  Gedit or vim works just fine.
 4.  Here you will need to enter your specific device info, such as what you will call them and their addresses.  This file is populated with examples and should be pretty self explanatory.  
 5.  If a device is dimmable, set the @dimmable variable to 1, otherwise it is not necessary or should be set to some number other than 1.  You can control devices or scenes, but you cannot currently get the status of a scene (that's on the to do list).
-6.  Copy the siriproxy-99i directory to `home/SiriProxy/plugins` directory
+6.  Copy the siriproxy-99i directory to `~/SiriProxy/plugins` directory
 7.  Open up siriproxy-isy99i/config-info.yml and copy all the settings listed there.
 8.  Navigate to `~/.siriproxy` and open config.yml for editing.
 9.  Paste the settings copied from config-info.yml into config.yml making sure to keep format and line spacing same as the examples.  
@@ -44,71 +54,35 @@ Usage
 
 **Turn on (device name)**
 
-- Will check the status of that device and determine its state.  
-- If it's On and it's a dimmer, Siri will give you the status and ask if you want to adjust the brightness settings.  
-- If it's Off and it's a dimmer, Siri will ask what percent you would like to turn it On to.  It it's not dimmable, it will just turn On.
-- If it's On, Siri will alert you that it is already On.
-- Otherwise, if Siri misunderstands you or that device isn't configured in devices.rb, you will be alerted that the device isn't programmed for control.
+- Will turn on the device. 
 
 **Turn off (device name)**
 
-- Will check the status of that device and determine its state.  
-- If it's On, Siri will shut it Off.  
-- If it's Off, Siri will alert you that it is already Off.
-- Otherwise, if Siri misunderstands you or that device isn't configured in devices.rb, you will be alerted that the device isn't programmed for control.
+- Will turn off the device.
 
-**Get status of (device name)**
+**Arm away, arm stay, disarm alarm**
 
-- Siri will request the status of the device from the ISY-99i and report it back to you.
-- Otherwise, if Siri misunderstands you or that device isn't configured in devices.rb, you will be alerted that the device isn't programmed for control.
+- Siri will change the alarm to the state requested and pushes a custom image to Siri.  Currently it does not confirm the state change, but I have not had any reliability problems.
+- NOTE: Siri has a lot of trouble with “S” sounds so you may have to alter you speech slightly to get Siri to recognize “arm stay” or you can change the syntax to use a look for a different pattern.  
 
-**Dim/turn up/turn down/set dimmer on/set level on (device name)**
+**Open garage, close garage**
 
-- If device is dimmable, Siri will ask what you would like to set the On percentage to and then issue the command to change that setting.
-- Otherwise, if Siri misunderstands you or that device isn't configured in devices.rb, you will be alerted that the device isn't programmed for control.
-- NOTE -- This particular function hasn't been behaving very well for me.  Siri has a hard time understanding the word 'dim'.  At least when I speak it.  If anyone has any ideas on how to improve this, let me know!
-
-**What is the temperature/inside inside/temperature temperature/in here?**
-
-- Gets current temperature from your thermostat and reports it to you.
-
-**What is the status/thermostat thermostat/status?**
-
-- Will retrieve and report the status of the following: current temp, cooling setpoint, heating setpoint, and mode.
-
-**Set cooling/cool setpoint/cooling setpoint to (##)**
-
-- Will set the cooling setpoint of your thermostat to whatever 2 digit value you tell it to.
-
-**Set heat/heating/heat setpoint/heating setpoint to (##)**
-
-- Will set the heating setpoint of your thermostat to whatever 2 digit value you tell it to.
-
-**NOTE -- Thermostat functions are currently limited to one thermostat.  I know there are many of you that have multiple thermostats in your setup, and it shouldn't be too hard to incorporate them into the code, but I only have one so that is how I wrote it.  I have multiples on my to do list...**
+- Siri will push an image from your IP camera and check the status of the door.  If the door is already in the requested position, it will let you know.  
+- If the garage door is closed it will open without any need for confirmation.
+- If the door is open, Siri will ask you to confirm the door is clear before closing the door. Obviously, this was for safety reasons. 
 
 Above are the main arguments that have been coded so far for use with the ISY-99i controller.  I have programmed in some specific phrases and instructions for my use.  These can be found in the siriproxy-isy99i.rb file.  Feel free to edit these and make it your own.  I only ask that you share any funny or neat applications that you come up with.
 
-Example:
-
-- Me:  Merry Christmas Siri!
-- Siri: Merry Christmas, Jesse!  Do you want me to put the tree lights on?
-- Me: Yes/sure/yep/ok/whatever
-- Siri turns on the tree lights.
-- Or...
-- Me: No thanks
-- Siri: Scrooge!
-
-**NOTE -- If/when you make changes to either devices.rb or siriproxy-isy99i.rb, you must copy it to the other plugin directory.  Remember, you put a copy in** `~/.rvm/gems/ruby-1.9.3-p0@SiriProxy/gems/siriproxy-0.3.0/plugins` **AND** `home/SiriProxy/plugins`**.  They both have to match!  Then follow steps 11 - 15 of the installation procedure to load up your changes and start the server again.**
+**NOTE: If/when you make changes to either devices.rb or siriproxy-isy99i.rb, you must copy it to the other plugin directory.  Remember, you put a copy in** `~/.rvm/gems/ruby-1.9.3-p###@SiriProxy/gems/siriproxy-0.3.#/plugins` **AND** `~/SiriProxy/plugins`**.  They both have to match!  Then follow steps 11 - 15 of the installation procedure to load up your changes and start the server again.**
 
 To Do List
 ----------
 
+- Test authenticated IP camera access.
 - Continue to refine the speech patterns for better recognition
 - Organize/streamline the code
-- Enable better scene controls (i.e. code in the REST commands for scene status)
-- Enable multiple thermostat control
 - Perhaps develop code for self awareness of devices/addresses (would require major overhaul and be completely different from current methods)
-- The sky's the limit!  Accepting any and all inputs...
+- The sky's the limit!  Accepting any and all suggetions.
 
 Acknowledgements
 ----------------
@@ -135,3 +109,4 @@ This software is provided as-is with no warranty whatsoever. Use at your own ris
 Apple could do things to block this kind of behavior if they want. Also, if you cause problems (by sending lots of trash to the Guzzoni servers or anything), I fully support Apple's right to ban your UDID (making your phone unable to use Siri). They can, and I wouldn't blame them if they do.
 
 I'm a huge fan of Apple and the work that they do. Siri is a very cool feature and I'm pretty excited to explore it and add functionality. Please refrain from using this software for anything malicious.
+
