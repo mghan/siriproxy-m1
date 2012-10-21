@@ -36,7 +36,7 @@ It may also be helpful to look at this [video by jbaybayjbaybay] (http://www.you
 and rename it siriproxy-isy99i or create a symbolic link. You will need to go to View and select 'Show Hidden Files' in order to see .rvm directory.
 3.  Navigate to the `siriproxy-isy99i/lib` directory and open devices.rb for editing.  Gedit or vim works just fine.
 4.  Here you will need to enter your specific device info, such as what you will call them and their addresses.  This file is populated with examples and should be pretty self explanatory.  
-5.  If a device is dimmable, set the @dimmable variable to 1, otherwise it is not necessary or should be set to some number other than 1.  You can control devices or scenes, but you cannot currently get the status of a scene (that's on the to do list).
+5.  If a device is dimmable, set the @dimmable variable to 1, otherwise it is not necessary or should be set to some number other than 1.  You can control devices or scenes, but you cannot currently get the status of a scene (scenes don't have a status).
 6.  Copy the siriproxy-99i directory to `~/SiriProxy/plugins` directory
 7.  Open up siriproxy-isy99i/config-info.yml and copy all the settings listed there.
 8.  Navigate to `~/.siriproxy` and open config.yml for editing.
