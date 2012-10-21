@@ -11,8 +11,8 @@ Utilizing the REST interface of the ISY-99i, this plugin matches certain voice c
 My fork of [Hoopty3’s plugin] (https://github.com/hoopty3/siriproxy-isy99i) is just that.  If you already have an ISY-99i and made it here, then you are already a tweaker and know it is impossible to provide single solution that will suit everyone’s needs and configuration.  I do not intend to merge any changes unless those are improvements in reliability or control. The baseline changes I made from Hoopty3’s plugin include:
 - Added Elk M1 Gold control for arming, disarming, and relay output control.
 - Added ability to push IP camera and custom images to Siri.     
-- Removed dimmer control since I mostly have CFL’s in my home.  Seemed like a lot of extra code for little value added.  
-- Removed status checking since I already have visual feedback. Seemed like a lot of extra code for little value added.  
+- Removed dimmer control since I mostly have CFL’s in my home.  Seemed like a lot of extra code to maintain for little value added, not to mention I think there were some problems correctly parsing device status.    
+- Removed status checking since I already have visual feedback. Seemed like a lot of extra code to maintain for little value added, not to mention I think there were some problems correctly parsing device status.   
 - Removed the Insteon thermostat control since I have a [Nest] (http://www.nest.com) thermostat which can also be controlled by SiriProxy thanks to [Chilitechno.] (https://github.com/chilitechno/SiriProxy-NestLearningThermostat)
 
 I would also like to point out that I am not a programmer, and haven't coded in Ruby before, so go easy on me. I gave myself a crash course in Ruby once I learned of this project, and that is it.  Google has been a very close friend over the past week or so.
