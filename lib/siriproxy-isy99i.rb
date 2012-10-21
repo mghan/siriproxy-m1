@@ -4,124 +4,50 @@ require 'httparty'
 require 'rubygems'
 require 'devices'
 require 'siri_objects'
-
+require 'cgi'
 
 class SiriProxy::Plugin::Isy99i < SiriProxy::Plugin
-  attr_accessor :password
-  attr_accessor :username
-  attr_accessor :host
-  attr_accessor :yourname
+  attr_accessor :isyip
+  attr_accessor :isyid
+  attr_accessor :isypw
+  attr_accessor :elkcode
+  attr_accessor :camip
+  attr_accessor :camid
+  attr_accessor :campw
+  attr_accessor :webip
   
   def initialize(config)  
-    self.password = config["password"]
-    self.username = config["username"]
-    self.host = config["host"]
-    self.yourname = config["yourname"]
-    @auth = {:username => "#{self.username}", :password => "#{self.password}"}
-  end
+    self.isyip = config["isyip"]
+    self.isyid = config["isyid"]
+    self.isypw = config["isypw"]
+    self.elkcode = config["elkcode"]
+    self.camip = config["camip"]
+    self.camid = config["camid"]
+    self.campw = config["campw"]
+    self.webip = config["webip"]
+    @isyauth = {:username => "#{self.isyid}", :password => "#{self.isypw}"}
+    @camauth = {:username => "#{self.camid}", :password => "#{self.campw}"}
+
+end
 
   class Rest
     include HTTParty
     format :xml
   end
 
+listen_for(/arm away/i) {arm_away}
 
-  listen_for(/merry christmas/i) {merry_christmas}
-  listen_for(/scrooge|turn off tree|turn off christmas lights/i) {scrooge}
-  listen_for(/ready to go|leave/i) {open_small_garage_door}
-  listen_for(/pulling (in|up|in the driveway)/i) {open_small_garage_door}
-  listen_for(/close the garage door/i) {close_small_garage_door}
-  listen_for (/cooling.*([0-9]{2})|cool setpoint.*([0-9]{2})|cooling setpoint.*([0-9]{2})/i) { |cooling_temp| set_cool_temp(cooling_temp) }
-  listen_for (/heat.*([0-9]{2})|heating.*([0-9]{2})|heat setpoint.*([0-9]{2})|heating setpoint.*([0-9]{2})/i) { |heating_temp| set_heat_temp(heating_temp) }
-  #listen_for(/test|text/i) {test}
+listen_for(/arm stay/i) {arm_stay}
+
+listen_for(/disarm alarm/i) {disarm_alarm}
+
+listen_for(/open garage/i) {open_garage}
+
+listen_for(/close garage/i) {close_garage}
+
+listen_for(/ring doorbell/i) {ring_doorbell}
 
   listen_for (/turn on (.*)/i) do |device|
-    deviceName = URI.unescape(device.strip)
-    @dimmable = 0 #sets default as non-dimmable - must be set to 1 in devices file otherwise
-    deviceAddress = deviceCrossReference(deviceName)
-      if deviceAddress.is_a?(Numeric)
-        scene = 1
-      end
-    puts "deviceName = #{deviceName}"
-    puts "deviceAddress = #{deviceAddress}"
-    puts "scene = #{scene}"
-    if deviceAddress != 0
-      check_status = Rest.get("#{self.host}/rest/status/#{deviceAddress}", :basic_auth => @auth).inspect
-      status = check_status.gsub(/^.*tted"=>"/, "")
-      status = status.gsub(/", "uom.*$/, "")
-      status_dimmer = status.to_i
-        if status_dimmer > 0
-          say "Status of #{deviceName} is already On, and it's set to #{status_dimmer}%"
-          response = ask "Would you like to adjust the brightness settings?"
-            if (response =~ /yes|sure|yep|yeah|whatever|why not|ok|I guess/i)
-              dim_percent = ask "OK. What percentage would you like me to set #{deviceName} to?"
-              dim_percent_adj = dim_percent.to_i * 2.55 #converts percent to 0-255 setpoint
-              dim_percent_adj = dim_percent_adj.to_i
-              say "I am setting #{deviceName} to #{dim_percent.to_i}%."
-              Rest.get("#{self.host}/rest/nodes/#{deviceAddress}/cmd/DON/#{dim_percent_adj}", :basic_auth => @auth)
-            else say "OK.  Suit yourself"
-            end
-        elsif status == "Off" || scene == 1
-          if @dimmable == 1
-            dim_percent = ask "This device is dimmable.  What would you like to set the level to?"
-            dim_percent_adj = dim_percent.to_i * 2.55 #converts percent to 0-255 setpoint
-            dim_percent_adj = dim_percent_adj.to_i
-            say "I am setting #{deviceName} to #{dim_percent.to_i}%."
-            Rest.get("#{self.host}/rest/nodes/#{deviceAddress}/cmd/DON/#{dim_percent_adj}", :basic_auth => @auth)
-          else say "I am turning on #{deviceName} now."
-            Rest.get("#{self.host}/rest/nodes/#{deviceAddress}/cmd/DON", :basic_auth => @auth)
-          end
-        elsif status == "On"
-          if @dimmable == 1
-            response = ask "This device is already On, and it's set to 100%. Do you want to change the level?"
-              if (response =~ /yes|sure|yep|yeah|whatever|why not|ok|I guess/i)
-                dim_percent = ask "OK. What percentage would you like me to set #{deviceName} to?"
-                dim_percent_adj = dim_percent.to_i * 2.55 #converts percent to 0-255 setpoint
-                dim_percent_adj = dim_percent_adj.to_i
-                say "I am setting #{deviceName} to #{dim_percent.to_i}%."
-                Rest.get("#{self.host}/rest/nodes/#{deviceAddress}/cmd/DON/#{dim_percent_adj}", :basic_auth => @auth)
-              else say "OK.  Suit yourself"
-              end
-          else say "But #{self.yourname}, that device is already On"
-          end
-        else status = "error"
-             say "I'm sorry #{self.yourname}, but there seems to be an error and I am currently unable to control #{deviceName}"
-        end
-    else say "I'm sorry, but I am not programmed to control #{deviceName}."
-    end
-    request_completed
-  end
-
-  listen_for (/turn off (.*)/i) do |device|
-    deviceName = URI.unescape(device.strip)
-    deviceAddress = deviceCrossReference(deviceName)
-      if deviceAddress.is_a?(Numeric)
-        scene = 1
-      end
-    puts "deviceName = #{deviceName}"
-    puts "deviceAddress = #{deviceAddress}"
-    puts "scene = #{scene}"
-      if deviceAddress != 0
-        check_status = Rest.get("#{self.host}/rest/status/#{deviceAddress}", :basic_auth => @auth).inspect
-        status = check_status.gsub(/^.*tted"=>"/, "")
-        status = status.gsub(/", "uom.*$/, "")
-        puts "status = #{status}"
-          if status == "On" || (status.to_i >= 1 && status.to_i <= 100) || scene == 1
-            say "I am now turning off #{deviceName}."
-            Rest.get("#{self.host}/rest/nodes/#{deviceAddress}/cmd/DOF", :basic_auth => @auth)
-          elsif status == "Off"
-            say "But #{self.yourname}, that device is already off"
-          else status = "error"
-            say "I'm sorry #{self.yourname}, but there seems to be an error and I am currently unable to control #{deviceName}"
-          end
-        else say "I'm sorry, but I am not programmed to control #{deviceName}."
-          #say "#{anything_else}?"
-      end
-    request_completed
-  end
-
-
-  listen_for (/get status of (.*)/i) do |device|
     deviceName = URI.unescape(device.strip)
     @dimmable = 0 #sets default as non-dimmable - has to be set to 1 in devices file otherwise
     deviceAddress = deviceCrossReference(deviceName)
@@ -131,161 +57,129 @@ class SiriProxy::Plugin::Isy99i < SiriProxy::Plugin
     puts "deviceName = #{deviceName}"
     puts "deviceAddress = #{deviceAddress}"
     puts "scene = #{scene}"
-      if deviceAddress != 0 && scene != 1
-        check_status = Rest.get("#{self.host}/rest/status/#{deviceAddress}", :basic_auth => @auth).inspect
-        status = check_status.gsub(/^.*tted"=>"/, "")
-        status = status.gsub(/", "uom.*$/, "")
-        status_dimmer = status.to_i
-          if status_dimmer > 0
-            say "Status of #{deviceName} is On, and it's set to #{status_dimmer}%"
-          elsif status == "On" || "Off"
-            if @dimmable == 1 && status == "On"
-              say "Status of #{deviceName} is On at 100%"
-            else say "Status of #{deviceName} is #{status}"
-            end
-          else status = "error"
-            say "I'm sorry, but there seems to be an error and I am unable to return status for #{deviceName}"
-          end
-      elsif scene == 1
-        say "I'm sorry, but I am unable to retrieve the status of a scene at this time"
-      else say "I'm sorry, but I am not programmed to control #{deviceName}."
-      end
+  say "OK. I am turning on #{deviceName} now."
+	Rest.get("#{self.isyip}/rest/nodes/#{deviceAddress}/cmd/DON", :basic_auth => @isyauth)
     request_completed
   end
 
-
-  listen_for (/(dim|damn|jim|jimmer|turn down|turn up|turnup|set dimmer on|set level on|set the level on) (.*)/i) do |keywords, device|
+  listen_for (/turn off (.*)/i) do |device|
     deviceName = URI.unescape(device.strip)
-    @dimmable = 0
+    @dimmable = 0 #sets default as non-dimmable - has to be set to 1 in devices file otherwise
     deviceAddress = deviceCrossReference(deviceName)
-    if deviceAddress != 0
-      check_status = Rest.get("#{self.host}/rest/status/#{deviceAddress}", :basic_auth => @auth).inspect
-      status = check_status.gsub(/^.*tted"=>"/, "")
-      status = status.gsub(/", "uom.*$/, "")
-      status_dimmer = status.to_i
-        if @dimmable == 1
-          dim_percent = ask "What would you like to set the level to?"
-          dim_percent_adj = dim_percent.to_i * 2.55 #converts percent to 0-255 setpoint
-          dim_percent_adj = dim_percent_adj.to_i
-          say "I am setting #{deviceName} to #{dim_percent.to_i}%."
-          Rest.get("#{self.host}/rest/nodes/#{deviceAddress}/cmd/DON/#{dim_percent_adj}", :basic_auth => @auth)
-        elsif @dimmable == 0
-          say "I'm sorry, but #{deviceName} is not dimmable."
-        else status = "error"
-             say "I'm sorry, but there seems to be an error and I am currently unable to control #{deviceName}"
-        end
-    else say "I'm sorry, but I am not programmed to control #{deviceName}."
-    end
-    request_completed
-  end
-
-
-  listen_for (/temperature.*inside|inside.*temperature|temperature.*in here/i) do 
-    deviceName = "thermostat"
-    deviceAddress = deviceCrossReference(deviceName)
-      if deviceAddress != 0
-        #say "Checking the inside temperature."
-        check_status = Rest.get("#{self.host}/rest/status/#{deviceAddress}", :basic_auth => @auth).inspect
-        indoor_temp = check_status.gsub(/^.*"ST\D+\d+\D+/, "")
-        indoor_temp = indoor_temp.gsub(/\D\d\d", "uom.*$/, "")
-        say "The current temperature in your house is #{indoor_temp} degrees."
-      end
-    request_completed 
-  end
-
-
-  listen_for (/thermostat.*status|status.*thermostat/i) do 
-    deviceName = "thermostat"
-    deviceAddress = deviceCrossReference(deviceName)
-    #say "Checking the status of the thermostat."
-    check_status = Rest.get("#{self.host}/rest/status/#{deviceAddress}", :basic_auth => @auth).inspect
-    indoor_temp = check_status.gsub(/^.*"ST\D+\d+\D+/, "")
-    indoor_temp = indoor_temp.gsub(/\D\d\d", "uom.*$/, "")
-    say "The current temperature in your house is #{indoor_temp} degrees." 
-    clispc = check_status.gsub(/^.*"CLISPC\D+\d+\", "\w+"=>"/, "")
-    clispc = clispc.gsub(/\D\d\d", "uom.*$/, "")
-    say "The cooling setpoint is #{clispc} degrees"
-    clisph = check_status.gsub(/^.*"CLISPH\D+\d+\", "\w+"=>"/, "")
-    clisph = clisph.gsub(/\D\d\d", "uom.*$/, "")
-    say "The heating setpoint is #{clisph} degrees"
-    climd = check_status.gsub(/^.*"CLIMD\D+\d+\", "\w+"=>"/, "")
-    climd = climd.gsub(/", "uom.*$/, "")
-    say "The mode is currently set to #{climd}"
-    request_completed 
-  end
-
-
-  def set_cool_temp(cooling_temp)
-    deviceName = "thermostat"
-    deviceAddress = deviceCrossReference(deviceName)
-    cooling_temp = cooling_temp.to_i * 2   #necessary as thermostat input must be doubled
-    say "One moment while I set the cooling setpoint to #{cooling_temp} degrees."
-    Rest.get("#{self.host}/rest/nodes/#{deviceAddress}/set/CLISPC/#{cooling_temp}", :basic_auth => @auth).inspect
-    request_completed
-  end
-
-
-  def set_heat_temp(heating_temp)
-    deviceName = "thermostat"
-    deviceAddress = deviceCrossReference(deviceName)
-    heating_temp = heating_temp.to_i * 2   #necessary as thermostat input must be doubled
-    say "One moment while I set the heating setpoint to #{heating_temp} degrees."
-    Rest.get("#{self.host}/rest/nodes/#{deviceAddress}/set/CLISPH/#{heating_temp}", :basic_auth => @auth).inspect
-    request_completed
-  end
-
-
-  def anything_else
-    response = ask "Is there anything else you would like me to do?"
-      if (response =~ /yes|sure|yep|yeah|whatever|why not|ok|I guess/i)
-        say "OK, but I'm still working on that part of my programming."
-      else say "Good.  Because I can't do that yet."
-      end
-    request_completed
-  end
-
-
-  def open_small_garage_door
-    say "OK.  I'll open the garage door for you"
-    Rest.get("#{self.host}/rest/nodes/46642/cmd/DON", :basic_auth => @auth)
-    request_completed 
-  end
-
-
-  def close_small_garage_door
-    say "Garage door is now closing."
-    Rest.get("#{self.host}/rest/nodes/46642/cmd/DOF", :basic_auth => @auth)
-    request_completed 
-  end
-
-
-  def merry_christmas
-    response = ask "Merry Christmas #{self.yourname}! Do you want me to put the tree lights on?"
-      if (response =~ /yes|sure|yep|yeah|whatever|why not|ok|I guess/i)
-        Rest.get("#{self.host}/rest/nodes/24409/cmd/DON", :basic_auth => @auth)
-      else say "Scrooge!"
-      end
-    request_completed 
-  end
-
-  def scrooge
-    say "Scrooge!"
-    Rest.get("#{self.host}/rest/nodes/24409/cmd/DOF", :basic_auth => @auth)
-    request_completed 
-  end
-
-  def test
-    deviceName = "cabinet light"
-    @dimmable = 0 #sets default as non-dimmable - must be set to 1 in devices file otherwise
-    deviceAddress = deviceCrossReference(deviceName)
-    puts "deviceName = #{deviceName}"
-    puts "deviceAddress = #{deviceAddress}"
       if deviceAddress.is_a?(Numeric)
         scene = 1
-        puts "scene = #{scene}"
-      else puts "this ain't workin"
       end
+    puts "deviceName = #{deviceName}"
+    puts "deviceAddress = #{deviceAddress}"
+    puts "scene = #{scene}"
+	say "OK. I am turning off #{deviceName} now."
+	Rest.get("#{self.isyip}/rest/nodes/#{deviceAddress}/cmd/DOF", :basic_auth => @isyauth)
     request_completed
+  end
+
+  def arm_away
+    say "OK. I am arming your security system to away mode."
+    Rest.get("#{self.isyip}/rest/elk/area/1/cmd/arm?armType=1&code=#{self.elkcode}", :basic_auth => @isyauth)
+	object = SiriAddViews.new
+	object.make_root(last_ref_id)
+	answer = SiriAnswer.new("Arming Station", [SiriAnswerLine.new('logo',"#{self.webip}/elk-kp2-away.png")])
+	object.views << SiriAnswerSnippet.new([answer])
+	send_object object
+    request_completed 
+  end
+
+  def arm_stay
+    say "OK. I am armimg your security system to stay mode."
+    Rest.get("#{self.isyip}/rest/elk/area/1/cmd/arm?armType=2&code=#{self.elkcode}", :basic_auth => @isyauth)
+	object = SiriAddViews.new
+	object.make_root(last_ref_id)
+	answer = SiriAnswer.new("Arming Station", [SiriAnswerLine.new('logo',"#{self.webip}/elk-kp2-stay.png")])
+	object.views << SiriAnswerSnippet.new([answer])
+	send_object object
+    request_completed 
+  end
+
+  def disarm_alarm
+    say "OK. I am disarming your security system."
+    Rest.get("#{self.isyip}/rest/elk/area/1/cmd/disarm?code=#{self.elkcode}", :basic_auth => @isyauth)
+	object = SiriAddViews.new
+	object.make_root(last_ref_id)
+	answer = SiriAnswer.new("Arming Station", [SiriAnswerLine.new('logo',"#{self.webip}/elk-kp2-disarmed.png")])
+	object.views << SiriAnswerSnippet.new([answer])
+	send_object object
+    request_completed 
+  end
+
+  def open_garage
+	# turn on garage scene to see the door
+	Rest.get("#{self.isyip}/rest/nodes/27356/cmd/DON", :basic_auth => @isyauth)
+	# push garage camera image to phone	
+	object = SiriAddViews.new
+	object.make_root(last_ref_id)
+	answer = SiriAnswer.new("Garage Camera", [SiriAnswerLine.new('logo',"#{self.camip}/cgi/jpg/image.cgi")])
+	object.views << SiriAnswerSnippet.new([answer])
+	send_object object
+	# check status of garage door
+	check_status = Rest.get("#{self.isyip}/rest/elk/zone/14/query/voltage", :basic_auth => @isyauth).inspect
+    	status = check_status.gsub(/^.*val\D+/, "")
+   	status = status.gsub(/\D+\D+.*$/, "")
+    	status_zone = status.to_f / 10
+	# garage door is open
+	if status_zone > 7.0
+		say "Your garage door is already open, Cabrone."  
+	else
+		# open garage door
+		say "OK. I am opening your garage door."
+		Rest.get("#{self.isyip}/rest/elk/output/3/cmd/on?offTimerSeconds=2", :basic_auth => @isyauth)
+	end
+	# turn off garage scene	
+	Rest.get("#{self.isyip}/rest/nodes/27356/cmd/DOF", :basic_auth => @isyauth)
+    request_completed
+  end
+
+  def close_garage
+	# turn on garage scene to see the door
+	Rest.get("#{self.isyip}/rest/nodes/27356/cmd/DON", :basic_auth => @isyauth)
+	# push garage camera image to phone	
+	object = SiriAddViews.new
+	object.make_root(last_ref_id)
+	answer = SiriAnswer.new("Garage Camera", [SiriAnswerLine.new('logo',"#{self.camip}/cgi/jpg/image.cgi")])
+	object.views << SiriAnswerSnippet.new([answer])
+	send_object object
+	# check status of garage door
+	check_status = Rest.get("#{self.isyip}/rest/elk/zone/14/query/voltage", :basic_auth => @isyauth).inspect
+    	status = check_status.gsub(/^.*val\D+/, "")
+   	status = status.gsub(/\D+\D+.*$/, "")
+    	status_zone = status.to_f / 10
+	# garage door is closed
+	if status_zone < 7.0
+		say "Your garage door is already closed, Cabrone."  
+	else
+		# ask if garage door is clear and take action	
+		response = ask "I would not want to cause injury or damage. Is the garage door clear?"
+		if (response =~ /yes|yep|yeah|ok/i)
+    			say "Thank you. I am closing your garage door."
+    			Rest.get("#{self.isyip}/rest/elk/output/3/cmd/on?offTimerSeconds=2", :basic_auth => @isyauth)
+		else
+			say "OK. I will not close your garage door."
+		end
+	end
+	# turn off garage scene
+	Rest.get("#{self.isyip}/rest/nodes/27356/cmd/DOF", :basic_auth => @isyauth)
+    request_completed 
+  end
+
+  def ring_doorbell
+    say "It seems rather pointless, but OK I am ringing your doorbell."
+    Rest.get("#{self.isyip}/rest/nodes/1C%207%2049%202/cmd/DON", :basic_auth => @isyauth)
+    	sleep(2) 
+    Rest.get("#{self.isyip}/rest/nodes/1C%207%2049%202/cmd/DOF", :basic_auth => @isyauth)
+	object = SiriAddViews.new
+	object.make_root(last_ref_id)
+	answer = SiriAnswer.new("Doorbell", [SiriAnswerLine.new('logo',"#{self.webip}/doorbell.jpg")])
+	object.views << SiriAnswerSnippet.new([answer])
+	send_object object
+    request_completed 
   end
   
 end
