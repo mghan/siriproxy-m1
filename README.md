@@ -31,9 +31,9 @@ Once SiriProxy is up and running, you'll want to add the siriproxy-isy99i plugin
 It may also be helpful to look at this [video by jbaybayjbaybay] (http://www.youtube.com/watch?v=A48SGUt_7lw) as it's the one I used to figure this process out.  The video includes info on creating a new plugin and editing the files, which can be helpful when it comes to experimenting with your own plugins, but it won't be necessary in order to just install this plugin.  So, I'll skip those particular instructions below.
 
 1.  Download the repository as a [zip file] (https://github.com/elvisimprsntr/siriproxy-isy99i/zipball/master).
-2.  Extract the full directory (i.e. elvisimprsntr-siriproxy-isy99i-######), depending on your distribution, to: 
-- `~/.rvm/gems/ruby-1.9.3-p###@SiriProxy/gems/siriproxy-0.3.#/plugins` 
-- `/usr/local/rvm/gems/ruby-1.9.3-p###@SiriProxy/gems/siriproxy-0.3.#/plugins`
+2.  Extract the full directory (i.e. elvisimprsntr-siriproxy-isy99i-######), depending on your distribution, to:    
+ - `~/.rvm/gems/ruby-1.9.3-p###@SiriProxy/gems/siriproxy-0.3.#/plugins`    
+ - `/usr/local/rvm/gems/ruby-1.9.3-p###@SiriProxy/gems/siriproxy-0.3.#/plugins`   
 and rename it siriproxy-isy99i or create a symbolic link. You will need to go to View and select 'Show Hidden Files' in order to see .rvm directory.
 3.  Navigate to the `siriproxy-isy99i/lib` directory and open devices.rb for editing.  Gedit or vim works just fine.
 4.  Here you will need to enter your specific device info, such as what you will call them and their addresses.  This file is populated with examples and should be pretty self explanatory.  
