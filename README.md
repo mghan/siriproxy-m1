@@ -8,7 +8,7 @@ Siriproxy-isy99i is a [SiriProxy] (https://github.com/plamoni/SiriProxy) plugin 
 
 Utilizing the REST interface of the ISY-99i, this plugin matches certain voice commands and sends the appropriate command via http to the controller.  See below for specific usage.
 
-My fork of [Hoopty3’s plugin] (https://github.com/hoopty3/siriproxy-isy99i) is just that.  If you already have an ISY-99i and made it here, then you are already a tweaker and know it is impossible to provide single solution that will suit everyone’s needs and configuration.  I do not intend to merge any changes unless they are improvements in reliability or control. The baseline changes I made from Hoopty3’s plugin include:
+My fork of [Hoopty3’s plugin] (https://github.com/hoopty3/siriproxy-isy99i) is just that.  If you already have an ISY-99i and made it here, then you are already a tweaker and know it is impossible to provide single solution that will suit everyone’s needs and configuration.  I do not intend to merge any changes unless those are improvements in reliability or control. The baseline changes I made from Hoopty3’s plugin include:
 - Added Elk M1 Gold control for arming, disarming, and relay output control.
 - Added ability to push IP camera and custom images to Siri.     
 - Removed dimmer control since I mostly have CFL’s in my home.
