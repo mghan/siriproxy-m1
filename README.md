@@ -79,6 +79,7 @@ To Do List
 ----------
 
 - Test authenticated IP camera access.
+- Add ability to launch a live IP camera feed or at least provide a button to do so.
 - Continue to refine the speech patterns for better recognition
 - Organize/streamline the code
 - Perhaps develop code for self awareness of devices/addresses (would require major overhaul and be completely different from current methods)
