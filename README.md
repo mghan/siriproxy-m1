@@ -4,7 +4,7 @@ siriproxy-isy99i
 About
 -----
 
-Siriproxy-isy99i is a [SiriProxy] (https://github.com/plamoni/SiriProxy) plugin that allows you to control home automation devices using the [Universal Devices ISY-99i Series] (http://sales.universal-devices.com) controller through Apple's Siri interface on any iDevice that supports Siri.   It does not require a jailbreak, nor do I endorse doing so.   
+Siriproxy-isy99i is a [SiriProxy] (https://github.com/plamoni/SiriProxy) plugin that allows you to control home automation devices using the [Universal Devices ISY-99i Series] (http://sales.universal-devices.com) controller through Apple's Siri interface on any iOS that supports Siri.   It does not require a jailbreak, nor do I endorse doing so.   
 
 Utilizing the REST interface of the ISY-99i, this plugin matches certain voice commands and sends the appropriate command via http to the controller.  See below for specific usage.
 
