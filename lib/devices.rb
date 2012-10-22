@@ -4,7 +4,7 @@ require 'cora'
   def deviceCrossReference(deviceName)
 
 
-    if (deviceName.match(/all lights|all scene/i))
+    if (deviceName.match(/all/i))
 
       @dimmable = 0 #must be set to 1 in order to recognize dimmable devices
                     #otherwise, not necessary or set to 0.
@@ -16,55 +16,55 @@ require 'cora'
                               # it must be left off from the settings i.e. 1A.0B.9F = 1A %20 B %20 9F %20 1
 
 
-    elsif (deviceName.match(/attic lights|attic scene/i))
+    elsif (deviceName.match(/attic/i))
     return "18595"
 
-    elsif (deviceName.match(/away mode|away scene/i))
+    elsif (deviceName.match(/away/i))
     return "4597"
 
-    elsif (deviceName.match(/exterior lights|exterior scene/i))
+    elsif (deviceName.match(/exterior|porch|driveway/i))
     return "32377"
 
-    elsif (deviceName.match(/garage lights|garage scene/i))
+    elsif (deviceName.match(/garage/i))
     return "27356"
 
-    elsif (deviceName.match(/home mode|home scene/i))
+    elsif (deviceName.match(/home/i))
     return "39198"
 
-    elsif (deviceName.match(/kitchen lights|kitchen scene/i))
+    elsif (deviceName.match(/kitchen/i))
     return "20304"
 
-    elsif (deviceName.match(/landing lights|landing scene/i))
+    elsif (deviceName.match(/landing/i))
     return "6489"
 
-    elsif (deviceName.match(/living lights|living scene/i))
+    elsif (deviceName.match(/living/i))
     return "19496"
 
-    elsif (deviceName.match(/master lights|master scene/i))
+    elsif (deviceName.match(/master/i))
     return "25061"
 
-    elsif (deviceName.match(/movie mode|movie scene/i))
+    elsif (deviceName.match(/movie/i))
     return "26974"
 
-    elsif (deviceName.match(/party mode|party scene/i))
+    elsif (deviceName.match(/party/i))
     return "25568"
 
-    elsif (deviceName.match(/stairwell lights|stairwell scene/i))
+    elsif (deviceName.match(/stairwell/i))
     return "32068"
 
-    elsif (deviceName.match(/theater lights|theater scene/i))
+    elsif (deviceName.match(/theater/i))
     return "44403"
 
-    elsif (deviceName.match(/theather ceiling/i))
+    elsif (deviceName.match(/theater ceiling/i))
     return "59332"
 
-    elsif (deviceName.match(/theather drapes/i))
+    elsif (deviceName.match(/theater drapes/i))
     return "37131"
 
-    elsif (deviceName.match(/theather lamp/i))
+    elsif (deviceName.match(/theater lamp/i))
     return "61694"
 
-    elsif (deviceName.match(/theather valance/i))
+    elsif (deviceName.match(/theater valance/i))
     return "8000"
 
     else 
@@ -72,4 +72,6 @@ require 'cora'
     end
     return deviceName
   end
+
+
 
