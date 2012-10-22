@@ -49,31 +49,27 @@ listen_for(/ring doorbell/i) {ring_doorbell}
 
   listen_for (/turn on (.*)/i) do |device|
     deviceName = URI.unescape(device.strip)
-    @dimmable = 0 #sets default as non-dimmable - has to be set to 1 in devices file otherwise
     deviceAddress = deviceCrossReference(deviceName)
-      if deviceAddress.is_a?(Numeric)
-        scene = 1
-      end
     puts "deviceName = #{deviceName}"
     puts "deviceAddress = #{deviceAddress}"
-    puts "scene = #{scene}"
-  say "OK. I am turning on #{deviceName} now."
+    if deviceAddress != 0
+	say "OK. I am turning on #{deviceName} now."
 	Rest.get("#{self.isyip}/rest/nodes/#{deviceAddress}/cmd/DON", :basic_auth => @isyauth)
+    else say "I'm sorry, but I am not programmed to control #{deviceName}."
+    end
     request_completed
   end
 
   listen_for (/turn off (.*)/i) do |device|
     deviceName = URI.unescape(device.strip)
-    @dimmable = 0 #sets default as non-dimmable - has to be set to 1 in devices file otherwise
     deviceAddress = deviceCrossReference(deviceName)
-      if deviceAddress.is_a?(Numeric)
-        scene = 1
-      end
     puts "deviceName = #{deviceName}"
     puts "deviceAddress = #{deviceAddress}"
-    puts "scene = #{scene}"
+    if deviceAddress != 0
 	say "OK. I am turning off #{deviceName} now."
 	Rest.get("#{self.isyip}/rest/nodes/#{deviceAddress}/cmd/DOF", :basic_auth => @isyauth)
+    else say "I'm sorry, but I am not programmed to control #{deviceName}."
+    end
     request_completed
   end
 
