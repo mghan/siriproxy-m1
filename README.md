@@ -74,15 +74,6 @@ To Do List
 - Perhaps develop code for self awareness of devices/addresses (would require major overhaul and be completely different from current methods)
 - The sky's the limit!  Accepting any and all suggetions.
 
-Acknowledgements
-----------------
-
-I really gotta thank [plamoni] (https://github.com/plamoni) for developing the SiriProxy and putting it out there for the rest of us tinkerers to play with.  It has been a lot of fun exploring how to use it in new and different ways.
-
-I also have to thank all the other plugin developers for sharing their code as well.  I couldn't have put this thing together without the examples that they put forward.
-
-Thanks guys!
-
 Licensing
 ---------
 
@@ -91,15 +82,4 @@ This program is free software: you can redistribute it and/or modify it under th
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with this program.  If not, see [http://www.gnu.org/licenses/](http://www.gnu.org/licenses/).
-
-Disclaimer
-----------
-
-I'm not affiliated with Apple in any way. They don't endorse this application. They own all the rights to Siri (and all associated trademarks). 
-
-This software is provided as-is with no warranty whatsoever. Use at your own risk!  I am not responsible for any damages/corruption which may occure to your system.  (It's not gonna happen, but I gotta say it...)
-
-Apple could do things to block this kind of behavior if they want. Also, if you cause problems (by sending lots of trash to the Guzzoni servers or anything), I fully support Apple's right to ban your UDID (making your phone unable to use Siri). They can, and I wouldn't blame them if they do.
-
-I'm a huge fan of Apple and the work that they do. Siri is a very cool feature and I'm pretty excited to explore it and add functionality. Please refrain from using this software for anything malicious.
 
