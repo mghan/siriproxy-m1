@@ -44,6 +44,8 @@ and rename it siriproxy-isy99i or create a symbolic link. You will need to go to
 14. Type `rvmsudo siriproxy server` <enter> followed by your password.
 15. SiriProxy with ISY99i control is now ready for use.
 
+**NOTE: If/when you make changes to either devices.rb or siriproxy-isy99i.rb, you must copy it to the other plugin directory.  Remember, you put a copy in** `~/.rvm/gems/ruby-1.9.3-p###@SiriProxy/gems/siriproxy-0.3.#/plugins` **AND** `~/SiriProxy/plugins`**.  They both have to match!  Then follow steps 11 - 15 of the installation procedure to load up your changes and start the server again.**
+
 Usage
 -----
 
@@ -62,9 +64,6 @@ Usage
 - If the garage door is closed it will open without any need for confirmation.
 - If the door is open, Siri will ask you to confirm the door is clear before closing the door. Obviously, this was for safety reasons. 
 
-Above are the main arguments that have been coded so far for use with the ISY-99i controller.  I have programmed in some specific phrases and instructions for my use.  These can be found in the siriproxy-isy99i.rb file.  Feel free to edit these and make it your own.  I only ask that you share any funny or neat applications that you come up with.
-
-**NOTE: If/when you make changes to either devices.rb or siriproxy-isy99i.rb, you must copy it to the other plugin directory.  Remember, you put a copy in** `~/.rvm/gems/ruby-1.9.3-p###@SiriProxy/gems/siriproxy-0.3.#/plugins` **AND** `~/SiriProxy/plugins`**.  They both have to match!  Then follow steps 11 - 15 of the installation procedure to load up your changes and start the server again.**
 
 To Do List
 ----------
