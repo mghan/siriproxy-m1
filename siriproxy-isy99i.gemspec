@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.version     = "0.0.1" 
   s.authors     = ["elvisimprsntr"]
   s.email       = [""]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/elvisimprsntr/siriproxy-isy99i"
   s.summary     = %q{Siri Proxy ISY-99i Plugin}
   s.description = %q{This is a plugin that lets users interact with their ISY-99i through Siri. }
 
