@@ -4,7 +4,6 @@ require 'httparty'
 require 'rubygems'
 require 'devices'
 require 'siri_objects'
-require 'cgi'
 
 class SiriProxy::Plugin::Isy99i < SiriProxy::Plugin
   attr_accessor :isyip
