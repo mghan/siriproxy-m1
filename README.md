@@ -70,7 +70,7 @@ To Do List
 
 Let me know if you want to collaborate.  
 
-- Update config.yml to pass entire camera URL.  
+- Update to pass in entire camera URL.  
 - Add authenticated IP camera access.
 - Add ability to launch a live IP camera feed or at least provide a button to do so.
 - Perhaps develop code for self awareness of devices/addresses (would require major overhaul and be completely different from current methods)
