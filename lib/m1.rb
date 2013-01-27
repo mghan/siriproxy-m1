@@ -48,7 +48,7 @@ require 'socket'
 # M1 IP Address & Port
 M1_IP = '192.168.1.201'   # Replace with your M1's IP Address
 M1_PORT = 2101
-M1_ARMCODE = 654321  # Define user "Siri" as arm only
+M1_ARMCODE = ######  # 6 digit M1 code.  Define the M1 user "Siri" as arm only
 
 
 
