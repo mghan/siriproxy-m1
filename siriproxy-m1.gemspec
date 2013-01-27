@@ -2,15 +2,15 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
-  s.name        = "siriproxy-isy99i"
-  s.version     = "0.0.1" 
-  s.authors     = ["elvisimprsntr"]
+  s.name        = "siriproxy-m1"
+  s.version     = "0.0.1"
+  s.authors     = ["mghan"]
   s.email       = [""]
-  s.homepage    = "https://github.com/elvisimprsntr/siriproxy-isy99i"
-  s.summary     = %q{Siri Proxy ISY-99i Plugin}
-  s.description = %q{This is a plugin that lets users interact with their ISY-99i through Siri. }
+  s.homepage    = ""
+  s.summary     = %q{An M1 Automation System Siri Proxy Plugin}
+  s.description = %q{An M1 Automation System Siri Proxy Plugin. }
 
-  s.rubyforge_project = ""
+  s.rubyforge_project = "siriproxy-m1"
 
   s.files         = `git ls-files 2> /dev/null`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/* 2> /dev/null`.split("\n")
@@ -20,6 +20,4 @@ Gem::Specification.new do |s|
   # specify any dependencies here; for example:
   # s.add_development_dependency "rspec"
   # s.add_runtime_dependency "rest-client"
-  # s.add_runtime_dependency "json"
-  s.add_runtime_dependency "httparty"
 end

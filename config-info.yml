@@ -4,15 +4,7 @@
 #NOTICE: Modifying these options in this file has no effect. You must put them in SiriProxy's config.yml!
 ##########################
 
-    - name: 'Isy99i'
-      path: './plugins/siriproxy-isy99i'
-      isyip: 'http://192.168.69.90' #IP address of the ISY-99i
-      isyid: 'username'
-      isypw: 'password'
-      elkcode: 'code'
-      camip: 'http://192.168.69.81' #IP address of your IP camera (if you have one)
-      camid: 'username'
-      campw: 'password'
-      webip: 'http://192.168.69.95' #IP address of your web server (hosting custom pictures)
+    - name: 'M1'
+      path: './plugins/siriproxy-m1'
 
 
