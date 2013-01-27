@@ -10,7 +10,7 @@ Utilizing a simple TCP socket interface to the M1, this plugin matches certain v
 
 My fork of [elvisimprsntr's plugin] (https://github.com/elvisimprsntr/siriproxy-isy99i) is just a starting point.  I did pull together bits and pieces from numerous other repositories.
 
-This is my first ruby project so please be gentle.
+This is my first Ruby project so please be gentle.
 
 
 Installation
@@ -52,49 +52,54 @@ Its take over an hour to install Ruby on a Raspberry Pi!
 I chose to point my iThing's DNS to the Raspberry Pi - simply edit the DNS setting under Settings>WiFi to use the Pi's IP address.
 
 Next change the Pi to handle DNS requests:
-   sudo nano /etc/dnsmasq.conf     at around line 63, find the following
 
-   #address=double-click.net/127.0.0.1     under it, add this...
+   `sudo nano /etc/dnsmasq.conf`
 
-   address=/guzzoni.apple.com/YOUR.Pi.IP.ADDR
+At around line 63, find the following
+
+   `#address=double-click.net/127.0.0.1`
+
+Under it, add this...
+
+   `address=/guzzoni.apple.com/YOUR.Pi.IP.ADDR`
 
 To close dnsmasq.conf, press CTRL+O then Enter then CTRL+X.
 
 Then restart dnsmasq with the following.
 
-   sudo /etc/init.d/dnsmasq restart
+   `sudo /etc/init.d/dnsmasq restart`
 
 
 Usage
 -----
 
+Here is a partial list of command this plug-in recognizes.
 
-Turn On -name-,
-Turn Off -name-,
-Set -name- to -level- %,
-Set Heating temp,
-Set Cooling temp,
-I'm Cold,
-I'm Warm,
-Inside Temperature
-Outside Temperature
-Wine Temperature
-Good Night
-Good Morning
-Watch Movie
-Open/Close Garage
-Master Suite Off
-Downstairs Off
-Master Bath On/Off
-Kitchen On/Off/Full
-Dining Room On/Off
-Living Room On/Off
-Accent On
-Let's Party!
+- Turn On -name-,
+- Turn Off -name-,
+- Set -name- to -level- %,
+- Set Heating temp,
+- Set Cooling temp,
+- I'm Cold,
+- I'm Warm,
+- Inside Temperature
+- Outside Temperature
+- Wine Temperature
+- Good Night
+- Good Morning
+- Watch Movie
+- Open/Close Garage
+- Master Suite Off
+- Downstairs Off
+- Master Bath On/Off
+- Kitchen On/Off/Full
+- Dining Room On/Off
+- Living Room On/Off
+- Accent On
 
 
-- If the garage door is closed it will open without any need for confirmation.
-- If the door is open, Siri will ask you to confirm the door is clear before closing the door. Obviously, this was for safety reasons.
+Note: If the garage door is closed it will open without any need for confirmation.
+If the door is open, Siri will ask you to confirm the door is clear before closing the door. Obviously, this was for safety reasons.
 
 
 
